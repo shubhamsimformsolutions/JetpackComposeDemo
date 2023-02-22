@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">JetComposeDemo</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="sign_in">Sign In</string>
+    <string name="username">Username</string>
+    <string name="username_error">Enter valid username.</string>
+    <string name="password">Password</string>
+    <string name="password_error">Enter valid password.</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="sign_msg_prefix">"Don't have an account? "</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="lesson_1_ui_practice">Lesson 1: Login Screen UI</string>
 </resources>
