@@ -1,4 +1,4 @@
-package com.simform.jetcomposedemo.login_ui.ui.theme
+package com.simform.jetcomposedemo.lesson_activities.constraint_layout.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

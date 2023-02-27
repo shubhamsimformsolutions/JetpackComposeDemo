@@ -10,4 +10,7 @@
     <string name="sign_msg_prefix">"Don't have an account? "</string>
     <string name="sign_up">Sign Up</string>
     <string name="lesson_1_ui_practice">Lesson 1: Login Screen UI</string>
+    <string name="title_activity_constraint_layout">ConstraintLayoutActivity</string>
+    <string name="constraint_title">UI designed with Jetpack Compose Constraint Layout</string>
+    <string name="compose_title">UI designed with Jetpack Compose</string>
 </resources>

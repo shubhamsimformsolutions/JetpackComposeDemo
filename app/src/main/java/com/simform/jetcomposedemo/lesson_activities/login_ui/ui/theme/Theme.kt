@@ -1,4 +1,4 @@
-package com.simform.jetcomposedemo.login_ui.ui.theme
+package com.simform.jetcomposedemo.lesson_activities.login_ui.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

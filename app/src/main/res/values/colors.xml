@@ -10,6 +10,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="login_pink">#EA93FA</color>
     <color name="light_purple">#3B007D</color>
+    <color name="lightest_purple">#CEA6FB</color>
     <color name="dark_purple">#260051</color>
     <color name="bright_orange">#FFA722</color>
 </resources>

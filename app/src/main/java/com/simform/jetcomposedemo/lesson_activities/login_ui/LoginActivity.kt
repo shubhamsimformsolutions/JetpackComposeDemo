@@ -1,16 +1,16 @@
-package com.simform.jetcomposedemo.login_ui
+package com.simform.jetcomposedemo.lesson_activities.login_ui
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -31,13 +31,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.resolveDefaults
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,22 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.simform.jetcomposedemo.R
-import com.simform.jetcomposedemo.login_ui.ui.theme.JetComposeDemoTheme
+import com.simform.jetcomposedemo.lesson_activities.login_ui.ui.theme.JetComposeDemoTheme
+import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            JetComposeDemoTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    MainViews()
-                }
-            }
+            MainViews()
         }
     }
 
@@ -194,8 +186,10 @@ class LoginActivity : ComponentActivity() {
     fun isValidPassword(password: String): Boolean {
         if (password.length < 8) return false
         if (password.filter { it.isDigit() }.firstOrNull() == null) return false
-        if (password.filter { it.isLetter() }.filter { it.isUpperCase() }.firstOrNull() == null) return false
-        if (password.filter { it.isLetter() }.filter { it.isLowerCase() }.firstOrNull() == null) return false
+        if (password.filter { it.isLetter() }.filter { it.isUpperCase() }
+                .firstOrNull() == null) return false
+        if (password.filter { it.isLetter() }.filter { it.isLowerCase() }
+                .firstOrNull() == null) return false
         if (password.filter { !it.isLetterOrDigit() }.firstOrNull() == null) return false
 
         return true
@@ -207,12 +201,10 @@ class LoginActivity : ComponentActivity() {
         var password by rememberSaveable { mutableStateOf("") }
         var isError by rememberSaveable { mutableStateOf(false) }
 
-        var orange = colorResource(id = R.color.bright_orange)
+        val orange = colorResource(id = R.color.bright_orange)
         var color by remember { mutableStateOf(Color.LightGray) }
 
         Column {
-
-
             OutlinedTextField(
                 value = password,
                 onValueChange = {
@@ -328,6 +320,8 @@ class LoginActivity : ComponentActivity() {
 
     @Composable
     fun RestViews() {
+        val scaffoldState = rememberScaffoldState()
+        val scope = rememberCoroutineScope()
         val mContext = LocalContext.current
         Column {
             Text(
@@ -345,7 +339,11 @@ class LoginActivity : ComponentActivity() {
                     ) {
                         //TODO: Onclick Sign UP
                         Toast
-                            .makeText(mContext, resources.getString(R.string.forgot_password), Toast.LENGTH_LONG)
+                            .makeText(
+                                mContext,
+                                resources.getString(R.string.forgot_password),
+                                Toast.LENGTH_LONG
+                            )
                             .show()
                     }
 
@@ -355,28 +353,38 @@ class LoginActivity : ComponentActivity() {
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Text(
-                    text = stringResource(R.string.sign_msg_prefix),
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    text = stringResource(R.string.sign_up),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    textDecoration = TextDecoration.Underline,
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = MutableInteractionSource(),
-                            indication = null
-                        ) {
-                            //TODO: Onclick Sign UP
-                            Toast.makeText(mContext,  resources.getString(R.string.sign_up), Toast.LENGTH_LONG).show()
+                val signup = stringResource(R.string.sign_up)
+                val annotatedString = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            textDecoration = TextDecoration.None,
+                            color = Color.White,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 20.sp,
+                        )
+                    ) {
+                        append(stringResource(R.string.sign_msg_prefix))
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            textDecoration = TextDecoration.Underline,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                        )
+                    ) {
+                        pushStringAnnotation(signup, signup)
+                        append(signup)
+                    }
+                }
+                ClickableText(text = annotatedString, onClick = { offset ->
+                    annotatedString.getStringAnnotations(offset, offset)
+                        .firstOrNull()?.let { span ->
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("Sign Up")
+                            }
                         }
-                )
+                })
             }
         }
     }
